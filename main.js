@@ -1,6 +1,8 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 let mainWindow;
 
+let window;
+
 let withFrame = false;
 
 async function createWindow () {
@@ -13,6 +15,10 @@ async function createWindow () {
 
 	mainWindow.setTitle("Quick Downloader");
 
+	mainWindow.webContents.send("window", win => {
+		window = win;
+	});
+
 	ipcMain.on('withFrame', e => {
 		withFrame = true;
 			mainWindow.close();
@@ -22,8 +28,10 @@ async function createWindow () {
 		withFrame = false;
 			mainWindow.close();
 		createWindow();
-	})
+	});
 
+	// console.log(mainWindow.webContents.);
+//
 }
 
 app.setAppUserModelId(process.execPath);
@@ -43,9 +51,9 @@ app.on('activate', function () {
 });
 
 ipcMain.on('minimise', e => {try {mainWindow.minimize()} catch(e) {}});
-ipcMain.on('minimise', e => {try {mainWindow.maximize()} catch(e) {}});
-ipcMain.on('minimise', e => {try {mainWindow.restore()} catch(e) {}});
-ipcMain.on('minimise', e => {try {mainWindow.close()} catch(e) {}});
+ipcMain.on('maximise', e => {try {mainWindow.maximize()} catch(e) {}});
+ipcMain.on('restore', e => {try {mainWindow.restore()} catch(e) {}});
+ipcMain.on('close', e => {try {mainWindow.close()} catch(e) {}});
 
 ipcMain.on('pickDir', e => {
 	e.returnValue = dialog.showOpenDialog(mainWindow, {

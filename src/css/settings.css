@@ -1,10 +1,7 @@
 .settings {
-    position: fixed;
-    top: 50px;
     overflow: auto;
-    max-height: calc(100vh - 75px);
-    z-index: 100000;
-    transform: translateX(-50%);
+    /*max-height: calc(100vh - 75px);*/
+    z-index: 120;
     box-shadow: #181b1e 0 0 5px 5px;
 }
 .settings_header {
@@ -27,8 +24,7 @@
     box-sizing: border-box;
     width: 20px;
     height: 20px;
-    background: transparent;
-    border: 2px solid #4f5660;
+    background: rgba(36, 40, 44, 0.9);
     border-radius: 4px;
     transition: 0.125s;
     position: absolute;
@@ -50,7 +46,6 @@ label {
 
 .setting {
     display: flex;
-    /*border-bottom: 1px solid #4f5660;*/
     margin: 12px 0;
 }
 .setting input[type="checkbox"], .setting input[type="radio"] {
@@ -78,7 +73,6 @@ input[type="file"] {
 label.saveLocation {
     display: block;
     padding: 9px;
-    /* border: 2px solid #4f5660; */
     box-sizing: border-box;
     color: #eee;
     border-radius: 7px;
@@ -93,10 +87,6 @@ label.saveLocation {
     background: rgba(36, 40, 44, 0.9);
 
 }
-
-/*input[type="file"]:focus ~ label.saveLocation, label.saveLocation:focus, input[type="file"]:active ~ label.saveLocation, label.saveLocation:active {*/
-    /*border-color: #b4c9e0;*/
-/*}*/
 
 input[type="file"] + label {
     border: none;

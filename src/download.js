@@ -11,7 +11,7 @@ class Download {
 	async init(url, name, save_location, parts, onUpdate) {
 		this.save_location = save_location;
 		this.extension = Download.get_extension(url);
-		this.final_file = path.join(save_location,name + this.extension);
+		this.final_file = path.join(this.save_location, name + this.extension);
 		this.url = url;
 		this.progress = 0;
 		this.total_length = await Download.get_length(url);
@@ -45,17 +45,6 @@ class Download {
 
 	static get_extension(url) { // https://stackoverflow.com/a/6997591/7886229
 		return `.${url.split('/').pop().split('.').pop()}`;
-	// 	// Remove everything to the last slash in URL
-	// 	url = url.substr(1 + url.lastIndexOf("."));
-	//
-	// 	// Break URL at ? and take first part (file name, extension)
-	// 	url = url.split('?')[0];
-	//
-	// 	// Sometimes URL doesn't have ? but #, so we should also do the same for #
-	// 	url = url.split('#')[0];
-	//
-	// 	// Now we have only extension
-	// 	return "."+url;
 	}
 
 	static async get_length(url) {
@@ -84,7 +73,8 @@ class Download {
 				host: q.hostname,
 				port: (q.protocol === "http:") ? 80 : 443
 			}, res => {
-				res.on("data", (chunk) => {
+				res.on("data", chunk => {
+					console.log(chunk);
 					res.destroy();
 					resolve(res.statusCode);
 				});
@@ -219,10 +209,10 @@ class Download {
 			final.on('open',async () => {
 				for (const part of this.parts) {
 					console.log(part.file.path);
-					await new Promise((resolve,reject)=>{
+					await new Promise(resolve => {
 						const r = fs.createReadStream(part.file.path);
 						r.on('close', resolve);
-						r.on('error', (err)=>{console.log(err)});
+						r.on('error', err => console.log(err));
 					    r.pipe(final,{end:false});
 					});
 				}
@@ -292,17 +282,22 @@ class Part {
 						this.parent.imDone();
 						resolve();
 					});
+
+					res.on('error', err => reject(err));
+					res.on('err', err => reject(err));
 				})
 			} catch (e) {
 				reject(e);
 			}
 		});
 	}
+
 	async cancel() {
 		this.download.abort();
 	}
+
 	async cleanup() {
-		this.file.deleteSync();
+		await this.file.delete();
 	}
 }
 

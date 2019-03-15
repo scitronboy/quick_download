@@ -46,7 +46,7 @@ export default class Download extends React.Component {
 				steps++;
 			}
 		} else if (window.localStorage.getItem('preferredUnit') === "dec") {
-			units = ["B", "KB", "MB", "GB", "TB", "PB", "EB"];
+			units = ["B", "kB", "mB", "gB", "tB", "pB", "eB"];
 
 			while (output > 1000) {
 				output /= 1000;
